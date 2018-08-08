@@ -1,5 +1,5 @@
-#ifndef HEADER_FILE
-#define HEADER_FILE
+#ifndef VECTORUTILS
+#define VECTORUTILS
 
 double * genVect(int nbRow);
 void printVect(double *mat, int nbRow);

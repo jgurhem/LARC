@@ -9,7 +9,7 @@ double * genSingleMat(char * filePath, int bsize){
 
 	mat = (double*) malloc(bsize*bsize*sizeof(double));
 
-	int i,j,nbRow,nbCol,indI,indJ;
+	int i,j,indI,indJ;
 	double tmp;
 
 	for(i = 0 ; i < bsize ; i++) { //row
@@ -42,7 +42,7 @@ void genMatrixBlock(char * filePath, int nb, int bsize, double * mat, int blockR
 	//printf("%s \n",matPath);
 	f = fopen(matPath, "r");
 
-	int i,j,nbRow,nbCol,indI,indJ;
+	int i,j,indI,indJ;
 	double tmp;
 
 	for(i = 0 ; i < bsize ; i++) { //row
@@ -60,8 +60,7 @@ void genMatrixBlock(char * filePath, int nb, int bsize, double * mat, int blockR
 
 void genBlockUnit(int nb, int bsize, double * mat, int blockRow, int blockCol){
 
-	int i,j,nbRow,nbCol;
-	double tmp;
+	int i,j;
 
 	for(i = 0 ; i < bsize ; i++) { //row
 	  for(j = 0; j < bsize ; j++) { //col
@@ -75,8 +74,7 @@ void genBlockUnit(int nb, int bsize, double * mat, int blockRow, int blockCol){
 
 void genBlockZero(int nb, int bsize, double * mat, int blockRow, int blockCol){
 
-	int i,j,nbRow,nbCol;
-	double tmp;
+	int i,j;
 
 	for(i = 0 ; i < bsize ; i++) { //row
 	  for(j = 0; j < bsize ; j++) { //col
@@ -135,16 +133,6 @@ double * genMatrixL(char* filePath, int nb, int bsize){
 	return mat;
 }
 
-void printMatrix(double *mat, int nb, int bsize){
-	int i,j;
-	for(i = 0 ; i < bsize * nb ; i++) { //row
-	  for(j = 0; j < bsize * nb; j++) { //col
-		printf("%14lf",mat[ i*nb*bsize + j] );
-	  }
-	  printf("\n");
-	}
-}
-
 void printMatrixLatex(double *mat, int nb, int bsize){
 	int i,j;
 	for(i = 0 ; i < bsize * nb ; i++) { //row
@@ -159,40 +147,4 @@ void printMatrixLatex(double *mat, int nb, int bsize){
 
 void cleanMatrix(double *mat){
 	free(mat);
-}
-
-double * extractL(double *in, int nbRow, int nbCol){
-
-        double * mat;
-        int i,j;
-
-        mat = (double*) malloc(nbCol*nbRow*sizeof(double));
-
-        for(i=0; i<nbRow; i++)
-                for(j=0; j<nbCol; j++)
-                        if(i>j)
-                                mat[i*nbCol+j] = in[i*nbCol+j];
-                        else if(i==j)
-                                mat[i*nbCol+j] = 1;
-                        else
-                                mat[i*nbCol+j] = 0;
-
-        return mat;
-}
-
-double * extractU(double *in, int nbRow, int nbCol){
-
-        double * mat;
-        int i,j;
-
-        mat = (double*) malloc(nbCol*nbRow*sizeof(double));
-
-        for(i=0; i<nbRow; i++)
-                for(j=0; j<nbCol; j++)
-                        if(i<=j)
-                                mat[i*nbCol+j] = in[i*nbCol+j];
-                        else
-                                mat[i*nbCol+j] = 0;
-
-        return mat;
 }

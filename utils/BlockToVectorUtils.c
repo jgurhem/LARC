@@ -9,7 +9,7 @@ double * genSingleVect(char * filePath, int bsize){
 
 	vect = (double*) malloc(bsize*sizeof(double));
 
-	int i,j,ii;
+	int i,ii;
 	double tmp;
 
 	for(i = 0 ; i < bsize ; i++) {
@@ -34,7 +34,7 @@ void genVectorBlock(char * filePath, int nb, int bsize, double * vect, int ind){
 	//printf("%s \n",matPath);
 	f = fopen(matPath, "r");
 
-	int i,j,ii;
+	int i,ii;
 	double tmp;
 
 	for(i = 0 ; i < bsize ; i++) {
