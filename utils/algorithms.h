@@ -18,4 +18,8 @@ void gaussElimination4(double *A, double *B, int size);
 void gaussJordan(double *A, double *B, int size);
 
 double diffNorm(double *A, double *B, int size);
+
+double dot(double *A, double *B, int size);
+double normEuclidean(double *A, int size);
+double powerIt(double *A, double *b, int size, double epsilon, int itmax);
 #endif

@@ -349,3 +349,51 @@ double diffNorm(double *A, double *B, int size){
 
 	return sqrt(diff);
 }
+
+double dot(double *A, double *B, int size){
+	double d=0;
+    int i;
+    for(i=0; i<size; i++){
+        d += A[i]*B[i];
+    }
+	return d;
+}
+
+double normEuclidean(double *A, int size){
+    return sqrt(dot(A, A, size));
+}
+
+void normalize(double *A, int size){
+	double norm = normEuclidean(A, size);
+	for (int i = 0; i < size; i++)
+		A[i] /= norm;
+}
+
+void printv(char *name, double *v, int size){
+	printf("%s", name);
+	for(int i = 0; i < size; i++){
+		printf(" %lf", v[i]);
+	}
+	printf("\n");
+}
+
+double powerIt(double *A, double *b, int size, double epsilon, int itmax){
+	double l = 0, la = 1;
+	int i = 0;
+	double *x;
+	x = (double*) malloc(size*sizeof(double));
+	while (fabs(l - la) > epsilon && i < itmax){
+	//while (i < itmax){
+		la = l;
+		normalize(b, size);
+		memcpy(x, b, size*sizeof(double));
+		prodMV(A, x, size);
+		l = dot(b, x, size);
+		memcpy(b, x, size*sizeof(double));
+		i++;
+	}
+	printf("it %d\n", i);
+	free(x);
+	return l;
+}
+
