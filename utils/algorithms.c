@@ -6,7 +6,6 @@
 //C=C-A*B
 void prodDiff(double*A, double*B, double*C,int size){
 	int i,j,k;
-
 	for(i=0;i<size;i++){
 		for(j=0;j<size;j++){
 			for(k=0;k<size;k++){
@@ -160,7 +159,7 @@ void factLU2(double* A, int size){
 
 	int i,j,k;
 
-	for (k=0; k<size-1; k++ ){
+	for (k=0; k<size; k++ ){
 		for(i=k+1;i<size;i++){
 			A[i*size+k] = A[i*size+k] / A[k*size+k];
 			for(j=k+1;j<size;j++){

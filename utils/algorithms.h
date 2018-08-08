@@ -8,6 +8,7 @@ double* mProdMat(double*A, double*B, int size);
 
 double * inversion(double*A, int size);
 void factLU(double* A, int size);
+void factLU2(double* A, int size);
 
 void solveLinearSystem(double *A, double *b, int size);
 void gaussElimination(double *A, double *B, int size);
