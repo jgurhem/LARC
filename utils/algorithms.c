@@ -383,7 +383,6 @@ double powerIt(double *A, double *b, int size, double epsilon, int itmax){
 	double *x;
 	x = (double*) malloc(size*sizeof(double));
 	while (fabs(l - la) > epsilon && i < itmax){
-	//while (i < itmax){
 		la = l;
 		normalize(b, size);
 		memcpy(x, b, size*sizeof(double));
@@ -392,7 +391,6 @@ double powerIt(double *A, double *b, int size, double epsilon, int itmax){
 		memcpy(b, x, size*sizeof(double));
 		i++;
 	}
-	printf("it %d\n", i);
 	free(x);
 	return l;
 }
