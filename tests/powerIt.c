@@ -1,8 +1,6 @@
 #include <stdio.h>
 
-#include <algorithms.h>
-#include <MatrixUtils.h>
-#include <VectorUtils.h>
+#include <mvoputils.h>
 
 int main(int argc, char **argv){
 
