@@ -3,6 +3,34 @@
 #include <string.h>
 #include <math.h>
 
+//y = A(Ax + x) + x
+double* dgeaxpxmv(double *A, double *x, int size){
+	int i,k;
+
+	double *tmp, *y;
+	tmp = (double*) malloc(size*sizeof(double));
+	y = (double*) malloc(size*sizeof(double));
+
+	for(i=0;i<size;i++){
+		y[i] = x[i];
+		for(k=0;k<size;k++){
+			y[i] += A[i*size+k] * x[k];
+		}
+	}
+
+	memcpy(tmp, y, size*sizeof(double));
+
+	for(i=0;i<size;i++){
+		y[i] = x[i];
+		for(k=0;k<size;k++){
+			y[i] += A[i*size+k] * tmp[k];
+		}
+	}
+
+	free(tmp);
+	return y;
+}
+
 //C=C-A*B
 void prodDiff(double*A, double*B, double*C,int size){
 	int i,j,k;
@@ -367,14 +395,6 @@ void normalize(double *A, int size){
 	double norm = normEuclidean(A, size);
 	for (int i = 0; i < size; i++)
 		A[i] /= norm;
-}
-
-void printv(char *name, double *v, int size){
-	printf("%s", name);
-	for(int i = 0; i < size; i++){
-		printf(" %lf", v[i]);
-	}
-	printf("\n");
 }
 
 double powerIt(double *A, double *b, int size, double epsilon, int itmax){

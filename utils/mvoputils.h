@@ -31,6 +31,7 @@ void printMatrixL(double *mat, int nbRow, int nbCol);
 double * genVect(int nbRow);
 void printVect(double *mat, int nbRow);
 
+double* dgeaxpxmv(double *A, double *x, int size);
 void prodDiff(double*A, double*B, double*C,int size);
 void prodMatVect(double*A, double*x, double*y,int size);
 void prodMat(double*A, double*B, int size);
