@@ -1,5 +1,5 @@
 C=gcc
-CFLAGS=-Wall -O2 -fPIC
+CFLAGS=-Wall -O2 -fPIC -std=c99
 
 SRCS=$(wildcard *.c)
 OBJS=$(SRCS:.c=.o)
