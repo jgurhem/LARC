@@ -21,15 +21,13 @@ double * genSingleVect(char * filePath, int bsize){
 	return vect;
 }
 
-void genVectorBlock(char * filePath, int nb, int bsize, double * vect, int ind){
+void genVectorBlockCOO(char * filePath, int nb, int bsize, double * vect, int ind){
 	FILE * f;
 	char matPath[150];
 	char str[10];
 
 	strcpy(matPath,filePath);
-
 	sprintf(str, "%d", ind);
-
 	strcat(matPath,str);
 	//printf("%s \n",matPath);
 	f = fopen(matPath, "r");
@@ -47,13 +45,38 @@ void genVectorBlock(char * filePath, int nb, int bsize, double * vect, int ind){
 	fclose(f);
 }
 
-double* genVector(char* filePath, int nb, int bsize){
+void genVectorBlockBin(char * filePath, int nb, int bsize, double * vect, int ind){
+	FILE * f;
+	char matPath[150];
+	char str[10];
+
+	strcpy(matPath,filePath);
+	sprintf(str, "%d", ind);
+	strcat(matPath,str);
+	f = fopen(matPath, "r");
+	fread(vect + ind * bsize, sizeof(double), bsize, f);
+	fclose(f);
+}
+
+double* importBlockVectorBin(char* filePath, int nb, int bsize){
 
 	double * vect;
 	int i;
 	vect = (double*) malloc(nb*bsize*sizeof(double));
 	for(i=0;i<nb;i++){
-		genVectorBlock(filePath,nb, bsize, vect,i);
+		genVectorBlockBin(filePath,nb, bsize, vect,i);
+	}
+
+	return vect;
+}
+
+double* importBlockVectorCOO(char* filePath, int nb, int bsize){
+
+	double * vect;
+	int i;
+	vect = (double*) malloc(nb*bsize*sizeof(double));
+	for(i=0;i<nb;i++){
+		genVectorBlockCOO(filePath,nb, bsize, vect,i);
 	}
 
 	return vect;

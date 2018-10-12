@@ -4,14 +4,19 @@
 
 #include <mvoputils.h>
 
-void test_parameter_coherence(int nb, int size, int print, int nbf, int nbit, double p, char* Af, char* Bf, char* Vf, char* Rf, char* op){
-	if(op == 0){
-		printf("no operation set.\n");
+void test_parameter_coherence(int nb, int size, int print, int nbf, int nbit, double p, char* Af, char* Bf, char* Vf, char* Rf, char* op, char* ff, char* sep){
+	if(nbf == 2 && sep == 0){
+		printf("No file coordinate separator provided.\n");
 		exit(-1);
 	}
 
-	if(nb < 0 || size < 0){
-		printf("Negative size\n");
+	if(ff == 0){
+		printf("No file format provided.\n");
+		exit(-1);
+	}
+
+	if(op == 0){
+		printf("No operation set.\n");
 		exit(-1);
 	}
 
@@ -42,31 +47,79 @@ void test_parameter_coherence(int nb, int size, int print, int nbf, int nbit, do
 			exit(-1);
 		}
 	}
+
+	if(nb < 0 || size < 0){
+		printf("Negative size\n");
+		exit(-1);
+	}
 }
 
-void choice(int nb, int size, int print, int nbf, int nbit, double p, char* Af, char* Bf, char* Vf, char* Rf, char* op){
+void choice(int nb, int size, int print, int nbf, int nbit, double p, char* Af, char* Bf, char* Vf, char* Rf, char* op, char* ff, char* sep){
 
-	test_parameter_coherence(nb, size, print, nbf, nbit, p, Af, Bf, Vf, Rf, op);
+	test_parameter_coherence(nb, size, print, nbf, nbit, p, Af, Bf, Vf, Rf, op, ff, sep);
 
 	double *A, *B, *V, *R;
 	A = 0; B = 0; V = 0; R = 0;
 	int matsize = 0;
+	if(nb >= 1)
+		matsize = nb * size;
+	else
+		matsize = size;
 	if(nbf == 1){
-		if(nb >= 1)
-			matsize = nb * size;
-		else
-			matsize = size;
-		if(Af != 0){
-			A = genSingleMat(Af, matsize, matsize);
+		if (!strcmp(ff, "coo")){
+			if(Af != 0){
+				A = importCOO(Af, matsize, matsize);
+			}
+			if(Bf != 0){
+				B = importCOO(Bf, matsize, matsize);
+			}
+			if(Vf != 0){
+				V = importCOO(Vf, matsize, 1);
+			}
+			if(Rf != 0){
+				R = importCOO(Rf, matsize, 1);
+			}
+		} else if (!strcmp(ff, "binR")){
+			if(Af != 0){
+				A = importBin(Af, matsize, matsize);
+			}
+			if(Bf != 0){
+				B = importBin(Bf, matsize, matsize);
+			}
+			if(Vf != 0){
+				V = importBin(Vf, matsize, 1);
+			}
+			if(Rf != 0){
+				R = importBin(Rf, matsize, 1);
+			}
 		}
-		if(Bf != 0){
-			B = genSingleMat(Bf, matsize, matsize);
-		}
-		if(Vf != 0){
-			V = genSingleMat(Vf, matsize, 1);
-		}
-		if(Rf != 0){
-			R = genSingleMat(Rf, matsize, 1);
+	} else if (nbf == 2) {
+		if (!strcmp(ff, "coo")){
+			if(Af != 0){
+				A = importBlockMatrixCOO(Af, sep, nb, size);
+			}
+			if(Bf != 0){
+				B = importBlockMatrixCOO(Bf, sep, nb, size);
+			}
+			if(Vf != 0){
+				V = importBlockVectorCOO(Vf, nb, size);
+			}
+			if(Rf != 0){
+				R = importBlockVectorCOO(Rf, nb, size);
+			}
+		} else if (!strcmp(ff, "binR")){
+			if(Af != 0){
+				A = importBlockMatrixBinR(Af, sep, nb, size);
+			}
+			if(Bf != 0){
+				B = importBlockMatrixBinR(Bf, sep, nb, size);
+			}
+			if(Vf != 0){
+				V = importBlockVectorBin(Vf, nb, size);
+			}
+			if(Rf != 0){
+				R = importBlockVectorBin(Rf, nb, size);
+			}
 		}
 	}
 
@@ -98,7 +151,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char* Af, 
 		l = extractMatrixL(nb, size, B);
 		u = extractMatrixU(nb, size, B);
 		if(print){
-		    printf("l\n");
+			printf("l\n");
 			printMatrix(l, matsize, matsize);
 			printf("u\n");
 			printMatrix(u, matsize, matsize);
@@ -181,6 +234,8 @@ void help(){
 	printf("[-b int] number of blocks\n");
 	printf("[-s int] size of blocks\n");
 	printf("[-p double] precision\n");
+	printf("[-ff coo/binR] file format\n");
+	printf("[-sep str] separator between coordinates of matrix files\n");
 	printf("[-it int] maximum of iterations\n");
 	printf("[-op operation] the operation may be lu, slslu, invbgj, slsb, slsbgj, powerIt, pmv, pdmv...\n");
 	printf("-one-file the matrices/vectors are stored in one file\n");
@@ -191,7 +246,7 @@ void help(){
 int main(int argc, char ** argv){
 	int nb = -1, size = -1, print = 0, nbf = 1, nbit = -1;
 	double p = -1.0;
-	char *Af = 0, *Bf = 0, *Vf = 0, *Rf = 0, *op = 0;
+	char *Af = 0, *Bf = 0, *Vf = 0, *Rf = 0, *op = 0, *ff = 0, *sep = 0;
 	for (int i = 1; i < argc; i++)
 	{
 		if (!strcmp(argv[i],"--help")){
@@ -226,6 +281,18 @@ int main(int argc, char ** argv){
 			if(++i >= argc)
 				continue;
 			size = atoi(argv[i]);
+			continue;
+		}
+		if (!strcmp(argv[i],"-ff")){
+			if(++i >= argc)
+				continue;
+			ff = argv[i];
+			continue;
+		}
+		if (!strcmp(argv[i],"-sep")){
+			if(++i >= argc)
+				continue;
+			sep = argv[i];
 			continue;
 		}
 		if (!strcmp(argv[i],"-op")){
@@ -268,6 +335,6 @@ int main(int argc, char ** argv){
 		break;
 	}
 
-	choice(nb, size, print, nbf, nbit, p, Af, Bf, Vf, Rf, op);
+	choice(nb, size, print, nbf, nbit, p, Af, Bf, Vf, Rf, op, ff, sep);
 	return 0;
 }

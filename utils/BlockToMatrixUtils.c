@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-double * genSingleMat(char * filePath, int nbRow, int nbCol){
+double * importCOO(char * filePath, int nbRow, int nbCol){
 	FILE * f;
 	f = fopen(filePath, "r");
 	double * mat;
@@ -25,7 +25,19 @@ double * genSingleMat(char * filePath, int nbRow, int nbCol){
 	return mat;
 }
 
-void genMatrixBlock(char * filePath, int nb, int bsize, double * mat, int blockRow, int blockCol){
+double * importBin(char * filePath, int nbRow, int nbCol){
+	FILE * f;
+	f = fopen(filePath, "r");
+	double * mat;
+
+	mat = (double*) malloc(nbCol * nbRow * sizeof(double));
+	fread(mat, sizeof(double), nbCol * nbRow, f);
+	fclose(f);
+
+	return mat;
+}
+
+void genMatrixBlockBinR(char* filePath, char* sep, int nb, int bsize, double* mat, int blockRow, int blockCol){
 	FILE * f;
 	char matPath[150];
 	char str[10];
@@ -35,7 +47,32 @@ void genMatrixBlock(char * filePath, int nb, int bsize, double * mat, int blockR
 	sprintf(str, "%d", blockRow);
 	strcat(matPath,str);
 
-	strcat(matPath,",");
+	strcat(matPath, sep);
+
+	sprintf(str, "%d", blockCol);
+	strcat(matPath,str);
+	//printf("%s \n",matPath);
+	f = fopen(matPath, "r");
+
+	int i;
+
+	for(i = 0 ; i < bsize; i++) { //row
+		fread(mat + (blockRow*bsize + i)*nb*bsize + blockCol*bsize, sizeof(double), bsize, f);
+	}
+	fclose(f);
+}
+
+void genMatrixBlock(char* filePath, char* sep, int nb, int bsize, double* mat, int blockRow, int blockCol){
+	FILE * f;
+	char matPath[150];
+	char str[10];
+
+	strcpy(matPath,filePath);
+
+	sprintf(str, "%d", blockRow);
+	strcat(matPath,str);
+
+	strcat(matPath, sep);
 
 	sprintf(str, "%d", blockCol);
 	strcat(matPath,str);
@@ -94,14 +131,28 @@ void extractBlock(int nb, int bsize, double * src, double * dst, int blockRow, i
 	}
 }
 
-double * genMatrixA(char* filePath, int nb, int bsize){
+double * importBlockMatrixBinR(char* filePath, char* sep, int nb, int bsize){
 
 	double * mat;
 	int i,j;
 	mat = (double*) malloc(nb*nb*bsize*bsize*sizeof(double));
 	for(i=0;i<nb;i++){
 		for(j=0;j<nb;j++){
-			genMatrixBlock(filePath,nb, bsize, mat,i ,j);
+			genMatrixBlockBinR(filePath, sep, nb, bsize, mat,i ,j);
+		}
+	}
+
+	return mat;
+}
+
+double * importBlockMatrixCOO(char* filePath, char* sep, int nb, int bsize){
+
+	double * mat;
+	int i,j;
+	mat = (double*) malloc(nb*nb*bsize*bsize*sizeof(double));
+	for(i=0;i<nb;i++){
+		for(j=0;j<nb;j++){
+			genMatrixBlock(filePath, sep, nb, bsize, mat,i ,j);
 		}
 	}
 
@@ -131,7 +182,7 @@ double * genMatrixU(char* filePath, int nb, int bsize){
 	for(i=0;i<nb;i++){
 		for(j=0;j<nb;j++){
 			if(i<=j)
-				genMatrixBlock(filePath,nb, bsize, mat,i ,j);
+				genMatrixBlock(filePath, ",", nb, bsize, mat,i ,j);
 			else
 				genBlockZero(nb, bsize, mat,i ,j);
 		}
@@ -165,7 +216,7 @@ double * genMatrixL(char* filePath, int nb, int bsize){
 	for(i=0;i<nb;i++){
 		for(j=0;j<nb;j++){
 			if(i>j)
-				genMatrixBlock(filePath,nb, bsize, mat,i ,j);
+				genMatrixBlock(filePath, ",", nb, bsize, mat,i ,j);
 			else if(i==j)
 				genBlockUnit(nb, bsize, mat,i ,j);
 			else

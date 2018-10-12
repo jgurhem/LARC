@@ -1,10 +1,11 @@
 #ifndef MVOPUTILS
 #define MVOPUTILS
 
-void genMatrixBlock(char * filePath, int nb, int bsize, double * mat, int blockRow, int blockCol);
-double * genSingleMat(char * filePath, int nbRow, int nbCol);
+double * importCOO(char * filePath, int nbRow, int nbCol);
+double * importBin(char * filePath, int nbRow, int nbCol);
 
-double * genMatrixA(char* filePath, int nb, int bsize);
+double * importBlockMatrixCOO(char* filePath, char* sep, int nb, int bsize);
+double * importBlockMatrixBinR(char* filePath, char* sep,int nb, int bsize);
 double * genMatrixL(char* filePath, int nb, int bsize);
 double * genMatrixU(char* filePath, int nb, int bsize);
 
@@ -14,7 +15,8 @@ double * extractMatrixU(int nb, int bsize, double *src);
 void printMatrixLatex(double *mat, int nb, int bsize);
 void cleanMatrix(double *mat);
 
-double* genVector(char* filePath, int nb, int bsize);
+double* importBlockVectorCOO(char* filePath, int nb, int bsize);
+double* importBlockVectorBin(char* filePath, int nb, int bsize);
 double * genSingleVect(char * filePath, int bsize);
 
 void printVector(double *mat, int nb, int bsize);
