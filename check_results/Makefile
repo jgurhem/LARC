@@ -5,11 +5,14 @@ MVOPUTILSDIR=../utils/
 MVOPUTILSSO=../utils/libmvoputils.so
 MVOPUTILSFLAGS=-L$(MVOPUTILSDIR) -I$(MVOPUTILSDIR) -lmvoputils
 
-all: main
+SRC= $(wildcard *.c)
+EXE= $(SRC:.c=)
 
-main: main.c
-	$(C) -o check_results main.c $(MVOPUTILSFLAGS) $(CFLAGS)
+all:$(EXE)
+
+%:%.c
+	$(C) -o $@ $< $(MVOPUTILSFLAGS) $(CFLAGS)
 
 clean:
-	rm -f check_results
+	rm -f $(EXE)
 
