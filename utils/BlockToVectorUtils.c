@@ -6,7 +6,10 @@ double * genSingleVect(char * filePath, int bsize){
 	FILE * f;
 	f = fopen(filePath, "r");
 	double * vect;
-
+    if(f == NULL){
+        printf("Cannot open file %s\n", filePath);
+        exit(1);
+    }
 	vect = (double*) malloc(bsize*sizeof(double));
 
 	int i,ii;
@@ -24,14 +27,12 @@ double * genSingleVect(char * filePath, int bsize){
 void genVectorBlockCOO(char * filePath, int nb, int bsize, double * vect, int ind){
 	FILE * f;
 	char matPath[150];
-	char str[10];
-
-	strcpy(matPath,filePath);
-	sprintf(str, "%d", ind);
-	strcat(matPath,str);
-	//printf("%s \n",matPath);
+	sprintf(matPath, "%s%d", filePath, ind);
 	f = fopen(matPath, "r");
-
+    if(f == NULL){
+        printf("Cannot open file %s\n", matPath);
+        exit(1);
+    }
 	int i,ii;
 	double tmp;
 
@@ -48,12 +49,12 @@ void genVectorBlockCOO(char * filePath, int nb, int bsize, double * vect, int in
 void genVectorBlockBin(char * filePath, int nb, int bsize, double * vect, int ind){
 	FILE * f;
 	char matPath[150];
-	char str[10];
-
-	strcpy(matPath,filePath);
-	sprintf(str, "%d", ind);
-	strcat(matPath,str);
+	sprintf(matPath, "%s%d", filePath, ind);
 	f = fopen(matPath, "r");
+    if(f == NULL){
+        printf("Cannot open file %s\n", matPath);
+        exit(1);
+    }
 	fread(vect + ind * bsize, sizeof(double), bsize, f);
 	fclose(f);
 }

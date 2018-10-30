@@ -5,12 +5,13 @@
 double * importCOO(char * filePath, int nbRow, int nbCol){
 	FILE * f;
 	f = fopen(filePath, "r");
-	double * mat;
-
+	if(f == NULL){
+		printf("Cannot open file %s\n", filePath);
+		exit(1);
+	}
+	double *mat, tmp;
 	mat = (double*) malloc(nbCol * nbRow * sizeof(double));
-
 	int i, j, indI, indJ;
-	double tmp;
 
 	for(i = 0; i < nbRow; i++) { //row
 		for(j = 0; j < nbCol; j++) { //col
@@ -28,8 +29,11 @@ double * importCOO(char * filePath, int nbRow, int nbCol){
 double * importBin(char * filePath, int nbRow, int nbCol){
 	FILE * f;
 	f = fopen(filePath, "r");
+	if(f == NULL){
+		printf("Cannot open file %s\n", filePath);
+		exit(1);
+	}
 	double * mat;
-
 	mat = (double*) malloc(nbCol * nbRow * sizeof(double));
 	fread(mat, sizeof(double), nbCol * nbRow, f);
 	fclose(f);
@@ -40,19 +44,12 @@ double * importBin(char * filePath, int nbRow, int nbCol){
 void genMatrixBlockBinR(char* filePath, char* sep, int nb, int bsize, double* mat, int blockRow, int blockCol){
 	FILE * f;
 	char matPath[150];
-	char str[10];
-
-	strcpy(matPath,filePath);
-
-	sprintf(str, "%d", blockRow);
-	strcat(matPath,str);
-
-	strcat(matPath, sep);
-
-	sprintf(str, "%d", blockCol);
-	strcat(matPath,str);
-	//printf("%s \n",matPath);
+	sprintf(matPath, "%s%d%s%d", filePath, blockRow, sep, blockCol);
 	f = fopen(matPath, "r");
+	if(f == NULL){
+		printf("Cannot open file %s\n", matPath);
+		exit(1);
+	}
 
 	int i;
 
@@ -65,19 +62,12 @@ void genMatrixBlockBinR(char* filePath, char* sep, int nb, int bsize, double* ma
 void genMatrixBlock(char* filePath, char* sep, int nb, int bsize, double* mat, int blockRow, int blockCol){
 	FILE * f;
 	char matPath[150];
-	char str[10];
-
-	strcpy(matPath,filePath);
-
-	sprintf(str, "%d", blockRow);
-	strcat(matPath,str);
-
-	strcat(matPath, sep);
-
-	sprintf(str, "%d", blockCol);
-	strcat(matPath,str);
-	//printf("%s \n",matPath);
+	sprintf(matPath, "%s%d%s%d", filePath, blockRow, sep, blockCol);
 	f = fopen(matPath, "r");
+	if(f == NULL){
+		printf("Cannot open file %s\n", matPath);
+		exit(1);
+	}
 
 	int i,j,indI,indJ;
 	double tmp;
