@@ -61,6 +61,16 @@ void printMatrix(double *mat, int nbRow, int nbCol){
 	}
 }
 
+void printMatrixCompact(double *mat, int nbRow, int nbCol){
+	int i,j;
+	for(i=0;i<nbRow;i++){
+		for(j=0;j<nbCol;j++){
+			printf("%5.2lf ",mat[i*nbCol+j]);
+		}
+		printf("\n");
+	}
+}
+
 void printMatrixU(double *mat, int nbRow, int nbCol){
 	int i,j;
 	for(i=0;i<nbRow;i++){
