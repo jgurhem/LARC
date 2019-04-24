@@ -33,5 +33,14 @@ int main(int argc, char **argv){
 	prodMat(l, u, size);
 	printf("rebuilt a\n");
 	printMatrix(l, size, size);
-	printf("norm = %lf\n", diffNorm(l, mc, size * size));
+	double norm = diffNorm(l, mc, size * size);
+	printf("norm = %lf\n", norm);
+	if (isnan(norm)) {
+		printf("error : norm = nan\n");
+		exit(1);
+	}
+	if (norm - 0.0001 > 0) {
+		printf("error : norm > 0.0001\n");
+		exit(1);
+	}
 }
