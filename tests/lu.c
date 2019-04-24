@@ -4,43 +4,42 @@
 
 #include <mvoputils.h>
 
-int main(int argc, char **argv){
+int main(int argc, char **argv) {
 
-	double *m, *l, *u, *mc;
-	int size = 5;
-	m = genMat(size, size);
-	mc = malloc(size * size * sizeof(double));
+  double *m, *l, *u, *mc;
+  int size = 5;
+  m = genMat(size, size);
+  mc = malloc(size * size * sizeof(double));
 
-	memcpy(mc, m, size * size * sizeof(double));
+  memcpy(mc, m, size * size * sizeof(double));
 
-	printf("a\n");
-	printMatrix(m, size, size);
-	printf("a\n");
-	printMatrix(mc, size, size);
+  printf("a\n");
+  printMatrix(m, size, size);
+  printf("a\n");
+  printMatrix(mc, size, size);
 
-	factLU2(m, size);
-	u = extractU(m, size, size);
-	l = extractL(m, size, size);
+  factLU2(m, size);
+  u = extractU(m, size, size);
+  l = extractL(m, size, size);
 
-	printf("a\n");
-	printMatrix(m, size, size);
-	printf("l\n");
-	printMatrix(l, size, size);
-	printf("u\n");
-	printMatrix(u, size, size);
+  printf("a\n");
+  printMatrix(m, size, size);
+  printf("l\n");
+  printMatrix(l, size, size);
+  printf("u\n");
+  printMatrix(u, size, size);
 
-
-	prodMat(l, u, size);
-	printf("rebuilt a\n");
-	printMatrix(l, size, size);
-	double norm = diffNorm(l, mc, size * size);
-	printf("norm = %lf\n", norm);
-	if (isnan(norm)) {
-		printf("error : norm = nan\n");
-		exit(1);
-	}
-	if (norm - 0.0001 > 0) {
-		printf("error : norm > 0.0001\n");
-		exit(1);
-	}
+  prodMat(l, u, size);
+  printf("rebuilt a\n");
+  printMatrix(l, size, size);
+  double norm = diffNorm(l, mc, size * size);
+  printf("norm = %lf\n", norm);
+  if (isnan(norm)) {
+    printf("error : norm = nan\n");
+    exit(1);
+  }
+  if (norm - 0.0001 > 0) {
+    printf("error : norm > 0.0001\n");
+    exit(1);
+  }
 }
