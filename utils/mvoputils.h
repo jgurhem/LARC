@@ -49,8 +49,6 @@ void doolittleLU(double *mat, int size);
 void solveLinearSystem(double *A, double *b, int size);
 void gaussElimination(double *A, double *B, int size);
 void gaussElimination2(double *A, double *B, int size);
-void gaussElimination3(double *A, double *B, int size);
-void gaussElimination4(double *A, double *B, int size);
 void gaussJordan(double *A, double *B, int size);
 
 double diffNorm(double *A, double *B, int size);

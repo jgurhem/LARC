@@ -239,77 +239,33 @@ void solveLinearSystem(double *A, double *b, int size) {
 
 void gaussElimination(double *A, double *B, int size) {
   int i, j, k;
-
   for (k = 0; k < size - 1; k++) {
-    for (i = k + 1; i < size; i++) {
-      A[k * size + i] = A[k * size + i] / A[k * size + k];
-    }
     B[k] = B[k] / A[k * size + k];
-
-    /*
-       for(i=k+1;i<size;i++){
-       for(j=k+1;j<size;j++){
-       A[i*size+j] = A[i*size+j] - A[i*size+k] * A[k*size+j];
-       }
-       B[i] = B[i] - A[i*size+k] * B[k];
-       }
-     */
-
     for (j = k + 1; j < size; j++) {
-      for (i = k + 1; i < size; i++) {
+      A[k * size + j] = A[k * size + j] / A[k * size + k];
+    }
+    for (i = k + 1; i < size; i++) {
+      B[i] = B[i] - A[i * size + k] * B[k];
+      for (j = k + 1; j < size; j++) {
         A[i * size + j] = A[i * size + j] - A[i * size + k] * A[k * size + j];
       }
-      B[j] = B[j] - A[j * size + k] * B[k];
     }
   }
-
   B[size - 1] = B[size - 1] / A[size * size - 1];
-
-  for (k = size - 1; k > 0; k--) {
-    for (i = 0; i < k; i++) {
-      B[i] = B[i] - A[i * size + k] * B[k];
+  for (k = 1; k < size; k++) {
+    for (i = 0; i < size - k; i++) {
+      B[i] = B[i] - A[i * size + size - k] * B[size - k];
     }
   }
 }
 
 void gaussElimination2(double *A, double *B, int size) {
   int i, j, k;
-
-  for (k = 0; k < size; k++) {
-
-    B[k] = B[k] / A[k * size + k];
-
-    if (k != size - 1) { // inutile en C puisque le for gére ce cas tout seul
-                         // mais pas YML
-      for (i = k + 1; i < size; i++) {
-        A[k * size + i] = A[k * size + i] / A[k * size + k];
-      }
-
-      for (j = k + 1; j < size; j++) {
-        for (i = k + 1; i < size; i++) {
-          A[i * size + j] = A[i * size + j] - A[i * size + k] * A[k * size + j];
-        }
-        B[j] = B[j] - A[j * size + k] * B[k];
-      }
-    }
-  }
-
-  for (k = size - 1; k > 0; k--) {
-    for (i = 0; i < k; i++) {
-      B[i] = B[i] - A[i * size + k] * B[k];
-    }
-  }
-}
-
-void gaussElimination3(double *A, double *B, int size) {
-  int i, j, k;
   for (k = 0; k < size - 1; k++) {
-
     for (i = k + 1; i < size; i++) {
       A[i * size + k] = A[i * size + k] / A[k * size + k];
       B[i] = B[i] - A[i * size + k] * B[k];
     }
-
     for (i = k + 1; i < size; i++) {
       for (j = k + 1; j < size; j++) {
         A[i * size + j] = A[i * size + j] - A[i * size + k] * A[k * size + j];
@@ -319,31 +275,6 @@ void gaussElimination3(double *A, double *B, int size) {
 
   for (k = size - 1; k >= 0; k--) {
     B[k] = B[k] / A[k * size + k];
-    for (i = 0; i < k; i++) {
-      B[i] = B[i] - A[i * size + k] * B[k];
-    }
-  }
-}
-
-void gaussElimination4(double *A, double *B, int size) {
-  int i, j, k;
-  for (k = 0; k < size; k++) {
-
-    B[k] = B[k] / A[k * size + k];
-
-    for (i = k + 1; i < size; i++) {
-      A[k * size + i] = A[k * size + i] / A[k * size + k];
-      B[i] = B[i] - A[i * size + k] * B[k];
-    }
-
-    for (i = k + 1; i < size; i++) {
-      for (j = k + 1; j < size; j++) {
-        A[i * size + j] = A[i * size + j] - A[i * size + k] * A[k * size + j];
-      }
-    }
-  }
-
-  for (k = size - 1; k > 0; k--) {
     for (i = 0; i < k; i++) {
       B[i] = B[i] - A[i * size + k] * B[k];
     }
