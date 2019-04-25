@@ -300,11 +300,10 @@ void gaussJordan(double *A, double *B, int size) {
       }
     }
 
-    for (j = 0; j < size; j++)
-      if (j != k) {
-        B[j] = B[j] - A[j * size + k] * B[k];
-        // printf("Im here k %d j %d\n", k, j);
-      }
+    for (j = 0; j < k; j++)
+      B[j] = B[j] - A[j * size + k] * B[k];
+    for (j = k + 1; j < size; j++)
+      B[j] = B[j] - A[j * size + k] * B[k];
   }
 }
 

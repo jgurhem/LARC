@@ -5,6 +5,7 @@ macro (do_test exe)
 endmacro (do_test)
 
 do_test(sls_lu)
+do_test(sls_gj)
 do_test(sls_g)
 add_test(sls_g_test2 sls_g 2)
 do_test(lu)
