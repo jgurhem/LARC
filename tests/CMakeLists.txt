@@ -6,6 +6,7 @@ endmacro (do_test)
 
 do_test(sls_lu)
 do_test(lu)
+do_test(doolitle_lu)
 do_test(dgeaxpxmv)
 do_test(powerIt)
 

@@ -183,11 +183,24 @@ void factLU(double *A, int size) {
   }
 }
 
+void doolittleLU(double *mat, int size) {
+  for (int i = 0; i < size; i++) {
+    for (int j = i; j < size; j++)
+      for (int k = 0; k < i; k++)
+        mat[i * size + j] -= mat[i * size + k] * mat[k * size + j];
+    for (int j = i + 1; j < size; j++) {
+      for (int k = 0; k < i; k++)
+        mat[j * size + i] -= mat[j * size + k] * mat[k * size + i];
+      mat[j * size + i] /= mat[i * size + i];
+    }
+  }
+}
+
 void factLU2(double *A, int size) {
 
   int i, j, k;
 
-  for (k = 0; k < size; k++) {
+  for (k = 0; k < size - 1; k++) {
     for (i = k + 1; i < size; i++) {
       A[i * size + k] = A[i * size + k] / A[k * size + k];
       for (j = k + 1; j < size; j++) {

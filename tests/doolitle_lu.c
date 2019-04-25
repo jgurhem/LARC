@@ -17,7 +17,7 @@ int main(int argc, char **argv) {
   printf("a\n");
   printMatrix(m, size, size);
 
-  factLU2(m, size);
+  doolittleLU(m, size);
   u = extractU(m, size, size);
   l = extractL(m, size, size);
 

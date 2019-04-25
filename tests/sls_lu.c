@@ -22,15 +22,13 @@ int main(int argc, char **argv) {
   printMatrix(m, size, size);
   printf("v\n");
   printMatrix(v, size, 1);
-  printf("v - copy\n");
-  printMatrix(vc, size, 1);
 
   solveLinearSystem(m, v, size);
 
   printf("x\n");
   printMatrix(v, size, 1);
   prodMV(mc, v, size);
-  printf("A*v\n");
+  printf("A*x =? v\n");
   printMatrix(v, size, 1);
   double norm = diffNorm(v, vc, size);
   printf("norm = %lf\n", norm);
