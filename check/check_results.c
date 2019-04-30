@@ -144,12 +144,12 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     }
     if (Vf != 0) {
       printf("V\n");
-      printVect(V, matsize);
+      printMatrix(V, matsize, 1);
       printf("\n");
     }
     if (Rf != 0) {
       printf("R\n");
-      printVect(R, matsize);
+      printMatrix(R, matsize, 1);
       printf("\n");
     }
   }
@@ -179,7 +179,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     gaussElimination(A, V, matsize);
     if (print) {
       printf("R - computed\n\n");
-      printVect(V, matsize);
+      printMatrix(V, matsize, 1);
     }
     printf("norm = %lf\n", diffNorm(R, V, matsize));
     return;
@@ -202,7 +202,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     res = dgeaxpxmv(A, V, matsize);
     if (print) {
       printf("R - computed\n\n");
-      printVect(res, matsize);
+      printMatrix(res, matsize, 1);
     }
     printf("norm = %lf\n", diffNorm(res, R, matsize * matsize));
     free(res);

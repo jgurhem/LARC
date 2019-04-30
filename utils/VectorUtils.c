@@ -13,10 +13,3 @@ double *genVect(int nbRow) {
 
   return mat;
 }
-
-void printVect(double *mat, int nbRow) {
-  int i;
-  for (i = 0; i < nbRow; i++) {
-    printf("%lf\n", mat[i]);
-  }
-}

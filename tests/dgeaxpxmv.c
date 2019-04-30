@@ -23,14 +23,14 @@ int main(int argc, char **argv) {
   printf("a\n");
   printMatrix(m, size, size);
   printf("v\n");
-  printVect(v, size);
+  printMatrix(v, size, 1);
 
   y = dgeaxpxmv(m, v, size);
 
   printf("r\n");
-  printVect(y, size);
+  printMatrix(y, size, 1);
   printf("r - computed\n");
-  printVect(r, size);
+  printMatrix(r, size, 1);
 
   double norm = diffNorm(y, r, size);
   printf("norm = %lf\n", norm);

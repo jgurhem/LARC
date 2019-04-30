@@ -23,7 +23,7 @@ int main(int argc, char **argv) {
   printf("a\n");
   printMatrix(m, size, size);
   printf("vect init\n");
-  printVect(v, size);
+  printMatrix(v, size, 1);
   l = powerIt(m, v, size, 0.0000000001, 100000);
   printf("l1 = %lf\n", l);
   if (isnan(l)) {
