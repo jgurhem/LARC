@@ -95,16 +95,13 @@ void test_parameter_coherence(int nb, int size, int print, int nbf, int nbit,
 }
 
 void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
-            char *Bf, char *Vf, char *Rf, char *op, char *ff, char *sep) {
+            char *Bf, char *Cf, char *Df, char *Vf, char *Rf, char *op,
+            char *ff, char *sep) {
 
   test_parameter_coherence(nb, size, print, nbf, nbit, p, Af, Bf, Vf, Rf, op,
                            ff, sep);
 
-  double *A, *B, *V, *R;
-  A = 0;
-  B = 0;
-  V = 0;
-  R = 0;
+  double *A = 0, *B = 0, *C = 0, *D = 0, *V = 0, *R = 0;
   int matsize = 0;
   if (nb >= 1)
     matsize = nb * size;
@@ -115,6 +112,10 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
   print_(print, "A", Af, A, matsize, matsize);
   B = import(Bf, matsize, matsize, nbf, ff, sep, nb, size);
   print_(print, "B", Bf, B, matsize, matsize);
+  C = import(Cf, matsize, matsize, nbf, ff, sep, nb, size);
+  print_(print, "C", Cf, C, matsize, matsize);
+  D = import(Df, matsize, matsize, nbf, ff, sep, nb, size);
+  print_(print, "D", Df, D, matsize, matsize);
   V = import(Vf, matsize, 1, nbf, ff, sep, nb, size);
   print_(print, "V", Vf, V, matsize, 1);
   R = import(Rf, matsize, 1, nbf, ff, sep, nb, size);
@@ -138,6 +139,20 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     gaussElimination(A, V, matsize);
     print_(print, "R - computed", Vf, V, matsize, 1);
     printf("norm = %lf\n", diffNorm(R, V, matsize));
+    return;
+  }
+
+  if (!strcmp(op, "mm_d")) {
+    prodDiff(A, B, C, matsize);
+    print_(print, "D - computed", Cf, C, matsize, matsize);
+    printf("norm = %lf\n", diffNorm(C, D, matsize * matsize));
+    return;
+  }
+
+  if (!strcmp(op, "mm")) {
+    prodMat(A, B, matsize);
+    print_(print, "C - computed", Af, A, matsize, matsize);
+    printf("norm = %lf\n", diffNorm(C, A, matsize * matsize));
     return;
   }
 
@@ -166,12 +181,20 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     return;
   }
 
+  printf("do I free ?\n");
+
   if (nbf == 1) {
     if (Af != 0) {
       free(A);
     }
     if (Bf != 0) {
       free(B);
+    }
+    if (Cf != 0) {
+      free(C);
+    }
+    if (Df != 0) {
+      free(D);
     }
     if (Vf != 0) {
       free(V);
@@ -196,7 +219,7 @@ void help() {
   printf("[-sep str] separator between coordinates of matrix files\n");
   printf("[-it int] maximum of iterations\n");
   printf("[-op operation] the operation may be lu, slslu, invbgj, slsb, "
-         "slsbgj, powerIt, pmv, pdmv...\n");
+         "slsbgj, powerIt, pmv, pdmv, mm_d (D=?C-A*B), mm (C=?A*B)...\n");
   printf("-one-file the matrices/vectors are stored in one file\n");
   printf("-multiple-file the matrices/vectors are stored in serveral files\n");
   printf("-print print the matrices and vectors\n");
@@ -205,7 +228,8 @@ void help() {
 int main(int argc, char **argv) {
   int nb = -1, size = -1, print = 0, nbf = 1, nbit = -1;
   double p = -1.0;
-  char *Af = 0, *Bf = 0, *Vf = 0, *Rf = 0, *op = 0, *ff = 0, *sep = 0;
+  char *Af = 0, *Bf = 0, *Cf = 0, *Df = 0, *Vf = 0, *Rf = 0, *op = 0, *ff = 0,
+       *sep = 0;
   for (int i = 1; i < argc; i++) {
     if (!strcmp(argv[i], "--help")) {
       help();
@@ -277,6 +301,18 @@ int main(int argc, char **argv) {
       Bf = argv[i];
       continue;
     }
+    if (!strcmp(argv[i], "-C")) {
+      if (++i >= argc)
+        continue;
+      Cf = argv[i];
+      continue;
+    }
+    if (!strcmp(argv[i], "-D")) {
+      if (++i >= argc)
+        continue;
+      Df = argv[i];
+      continue;
+    }
     if (!strcmp(argv[i], "-V")) {
       if (++i >= argc)
         continue;
@@ -293,6 +329,6 @@ int main(int argc, char **argv) {
     break;
   }
 
-  choice(nb, size, print, nbf, nbit, p, Af, Bf, Vf, Rf, op, ff, sep);
+  choice(nb, size, print, nbf, nbit, p, Af, Bf, Cf, Df, Vf, Rf, op, ff, sep);
   return 0;
 }
