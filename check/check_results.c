@@ -4,6 +4,35 @@
 
 #include <mvoputils.h>
 
+double *import(char *Af, int nrow, int ncol, int nbf, char *ff, char *sep,
+               int nb, int size) {
+  double *A = 0;
+  if (Af == 0)
+    return 0;
+  if (nbf == 1) {
+    if (!strcmp(ff, "coo")) {
+      A = importCOO(Af, nrow, ncol);
+    } else if (!strcmp(ff, "binR")) {
+      A = importBin(Af, nrow, ncol);
+    }
+  } else if (nbf == 2) {
+    if (!strcmp(ff, "coo")) {
+      if (ncol == 1) {
+        A = importBlockVectorCOO(Af, nb, size);
+      } else {
+        A = importBlockMatrixCOO(Af, sep, nb, size);
+      }
+    } else if (!strcmp(ff, "binR")) {
+      if (ncol == 1) {
+        A = importBlockVectorBin(Af, nb, size);
+      } else {
+        A = importBlockMatrixBinR(Af, sep, nb, size);
+      }
+    }
+  }
+  return A;
+}
+
 void test_parameter_coherence(int nb, int size, int print, int nbf, int nbit,
                               double p, char *Af, char *Bf, char *Vf, char *Rf,
                               char *op, char *ff, char *sep) {
@@ -73,63 +102,11 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     matsize = nb * size;
   else
     matsize = size;
-  if (nbf == 1) {
-    if (!strcmp(ff, "coo")) {
-      if (Af != 0) {
-        A = importCOO(Af, matsize, matsize);
-      }
-      if (Bf != 0) {
-        B = importCOO(Bf, matsize, matsize);
-      }
-      if (Vf != 0) {
-        V = importCOO(Vf, matsize, 1);
-      }
-      if (Rf != 0) {
-        R = importCOO(Rf, matsize, 1);
-      }
-    } else if (!strcmp(ff, "binR")) {
-      if (Af != 0) {
-        A = importBin(Af, matsize, matsize);
-      }
-      if (Bf != 0) {
-        B = importBin(Bf, matsize, matsize);
-      }
-      if (Vf != 0) {
-        V = importBin(Vf, matsize, 1);
-      }
-      if (Rf != 0) {
-        R = importBin(Rf, matsize, 1);
-      }
-    }
-  } else if (nbf == 2) {
-    if (!strcmp(ff, "coo")) {
-      if (Af != 0) {
-        A = importBlockMatrixCOO(Af, sep, nb, size);
-      }
-      if (Bf != 0) {
-        B = importBlockMatrixCOO(Bf, sep, nb, size);
-      }
-      if (Vf != 0) {
-        V = importBlockVectorCOO(Vf, nb, size);
-      }
-      if (Rf != 0) {
-        R = importBlockVectorCOO(Rf, nb, size);
-      }
-    } else if (!strcmp(ff, "binR")) {
-      if (Af != 0) {
-        A = importBlockMatrixBinR(Af, sep, nb, size);
-      }
-      if (Bf != 0) {
-        B = importBlockMatrixBinR(Bf, sep, nb, size);
-      }
-      if (Vf != 0) {
-        V = importBlockVectorBin(Vf, nb, size);
-      }
-      if (Rf != 0) {
-        R = importBlockVectorBin(Rf, nb, size);
-      }
-    }
-  }
+
+  A = import(Af, matsize, matsize, nbf, ff, sep, nb, size);
+  B = import(Bf, matsize, matsize, nbf, ff, sep, nb, size);
+  V = import(Vf, matsize, 1, nbf, ff, sep, nb, size);
+  R = import(Rf, matsize, 1, nbf, ff, sep, nb, size);
 
   if (print) {
     if (Af != 0) {
