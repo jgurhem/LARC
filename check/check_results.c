@@ -33,6 +33,14 @@ double *import(char *Af, int nrow, int ncol, int nbf, char *ff, char *sep,
   return A;
 }
 
+void print_(int print, char *s, char *Af, double *A, int nrow, int ncol) {
+  if (print && Af != 0) {
+    printf("%s\n", s);
+    printMatrix(A, nrow, ncol);
+    printf("\n");
+  }
+}
+
 void test_parameter_coherence(int nb, int size, int print, int nbf, int nbit,
                               double p, char *Af, char *Bf, char *Vf, char *Rf,
                               char *op, char *ff, char *sep) {
@@ -104,48 +112,22 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     matsize = size;
 
   A = import(Af, matsize, matsize, nbf, ff, sep, nb, size);
+  print_(print, "A", Af, A, matsize, matsize);
   B = import(Bf, matsize, matsize, nbf, ff, sep, nb, size);
+  print_(print, "B", Bf, B, matsize, matsize);
   V = import(Vf, matsize, 1, nbf, ff, sep, nb, size);
+  print_(print, "V", Vf, V, matsize, 1);
   R = import(Rf, matsize, 1, nbf, ff, sep, nb, size);
-
-  if (print) {
-    if (Af != 0) {
-      printf("A\n");
-      printMatrix(A, matsize, matsize);
-      printf("\n");
-    }
-    if (Bf != 0) {
-      printf("B\n");
-      printMatrix(B, matsize, matsize);
-      printf("\n");
-    }
-    if (Vf != 0) {
-      printf("V\n");
-      printMatrix(V, matsize, 1);
-      printf("\n");
-    }
-    if (Rf != 0) {
-      printf("R\n");
-      printMatrix(R, matsize, 1);
-      printf("\n");
-    }
-  }
+  print_(print, "R", Rf, R, matsize, 1);
 
   if (!strcmp(op, "blu")) {
     double *u, *l;
     l = extractMatrixL(nb, size, B);
     u = extractMatrixU(nb, size, B);
-    if (print) {
-      printf("l\n");
-      printMatrix(l, matsize, matsize);
-      printf("u\n");
-      printMatrix(u, matsize, matsize);
-    }
+    print_(print, "l", Bf, l, matsize, matsize);
+    print_(print, "u", Bf, u, matsize, matsize);
     prodMat(l, u, matsize);
-    if (print) {
-      printf("B - computed\n\n");
-      printMatrix(l, matsize, matsize);
-    }
+    print_(print, "B - computed", Bf, l, matsize, matsize);
     printf("norm = %lf\n", diffNorm(l, A, matsize * matsize));
     free(l);
     free(u);
@@ -154,10 +136,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
 
   if (!strcmp(op, "slsg")) {
     gaussElimination(A, V, matsize);
-    if (print) {
-      printf("R - computed\n\n");
-      printMatrix(V, matsize, 1);
-    }
+    print_(print, "R - computed", Vf, V, matsize, 1);
     printf("norm = %lf\n", diffNorm(R, V, matsize));
     return;
   }
@@ -165,10 +144,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
   if (!strcmp(op, "invgj")) {
     double *inv;
     inv = inversion(A, matsize);
-    if (print) {
-      printf("B - computed\n\n");
-      printMatrix(inv, matsize, matsize);
-    }
+    print_(print, "B - computed", Af, inv, matsize, matsize);
     printf("norm = %lf\n", diffNorm(inv, B, matsize * matsize));
     free(inv);
     return;
@@ -177,10 +153,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
   if (!strcmp(op, "dgeaxpxmv")) {
     double *res;
     res = dgeaxpxmv(A, V, matsize);
-    if (print) {
-      printf("R - computed\n\n");
-      printMatrix(res, matsize, 1);
-    }
+    print_(print, "R - computed", Vf, V, matsize, 1);
     printf("norm = %lf\n", diffNorm(res, R, matsize * matsize));
     free(res);
     return;
