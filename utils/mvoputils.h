@@ -39,6 +39,7 @@ void prodMatVect(double *A, double *x, double *y, int size);
 void prodMat(double *A, double *B, int size);
 double *mProdMat(double *A, double *B, int size);
 void prodMV(double *A, double *x, int size);
+void prodDiffMV(double *A, double *x, double *y, int size);
 
 double *inversion(double *A, int size);
 void factLU(double *A, int size);
