@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-double *importCOO(char *filePath, int nbRow, int nbCol) {
+double *readCOO(char *filePath, int nbRow, int nbCol) {
   FILE *f;
   f = fopen(filePath, "r");
   if (f == NULL) {
@@ -26,7 +26,7 @@ double *importCOO(char *filePath, int nbRow, int nbCol) {
   return mat;
 }
 
-double *importBin(char *filePath, int nbRow, int nbCol) {
+double *readBin(char *filePath, int nbRow, int nbCol) {
   FILE *f;
   f = fopen(filePath, "r");
   if (f == NULL) {
@@ -127,7 +127,7 @@ void extractBlock(int nb, int bsize, double *src, double *dst, int blockRow,
   }
 }
 
-double *importBlockMatrixBinR(char *filePath, char *sep, int nb, int bsize) {
+double *readBlockMatrixBinR(char *filePath, char *sep, int nb, int bsize) {
 
   double *mat;
   int i, j;
@@ -141,7 +141,7 @@ double *importBlockMatrixBinR(char *filePath, char *sep, int nb, int bsize) {
   return mat;
 }
 
-double *importBlockMatrixCOO(char *filePath, char *sep, int nb, int bsize) {
+double *readBlockMatrixCOO(char *filePath, char *sep, int nb, int bsize) {
 
   double *mat;
   int i, j;

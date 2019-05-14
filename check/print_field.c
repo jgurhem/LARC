@@ -4,7 +4,7 @@
 
 #include <mvoputils.h>
 
-void importBlockBinR(char *filePath, char *sep, double *mat, int bsRow,
+void readBlockBinR(char *filePath, char *sep, double *mat, int bsRow,
                      int bsCol, int gsCol, int startR, int startC, int blockRow,
                      int blockCol) {
   FILE *f;
@@ -28,7 +28,7 @@ void importBlockBinR(char *filePath, char *sep, double *mat, int bsRow,
   fclose(f);
 }
 
-double *importMatrixBinR(char *filePath, char *sep, int nbRow, int nbCol,
+double *readMatrixBinR(char *filePath, char *sep, int nbRow, int nbCol,
                          int gsRow, int gsCol, int *size) {
   double *m;
   m = malloc(gsRow * gsCol * sizeof(double));
@@ -41,7 +41,7 @@ double *importMatrixBinR(char *filePath, char *sep, int nbRow, int nbCol,
       for (int k = 0; k < j; k++) {
         startR += size[2 * k * nbCol + 1];
       }
-      importBlockBinR(filePath, sep, m, size[2 * (j * nbCol + i) + 1],
+      readBlockBinR(filePath, sep, m, size[2 * (j * nbCol + i) + 1],
                       size[2 * (j * nbCol + i)], gsCol, startR, startC, j, i);
     }
   }
@@ -107,15 +107,15 @@ void choice(int bx, int sx, int sy, int nbProc, int nbLocIt, int print,
   size = computeParam(bx, sx, sy, nbProc, nbLocIt);
 
   if (Af != 0) {
-    A = importMatrixBinR(Af, sep, nbProc / bx, bx, size[2 * nbProc + 1],
+    A = readMatrixBinR(Af, sep, nbProc / bx, bx, size[2 * nbProc + 1],
                          size[2 * nbProc], size);
   }
   if (Bf != 0) {
-    B = importMatrixBinR(Bf, sep, nbProc / bx, bx, size[2 * nbProc + 1],
+    B = readMatrixBinR(Bf, sep, nbProc / bx, bx, size[2 * nbProc + 1],
                          size[2 * nbProc], size);
   }
   if (SFf != 0) {
-    SF = importBin(SFf, sy, sx);
+    SF = readBin(SFf, sy, sx);
   }
 
   if (print) {

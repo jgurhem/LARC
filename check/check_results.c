@@ -4,29 +4,29 @@
 
 #include <mvoputils.h>
 
-double *import(char *Af, int nrow, int ncol, int nbf, char *ff, char *sep,
+double *read(char *Af, int nrow, int ncol, int nbf, char *ff, char *sep,
                int nb, int size) {
   double *A = 0;
   if (Af == 0)
     return 0;
   if (nbf == 1) {
     if (!strcmp(ff, "coo")) {
-      A = importCOO(Af, nrow, ncol);
+      A = readCOO(Af, nrow, ncol);
     } else if (!strcmp(ff, "binR")) {
-      A = importBin(Af, nrow, ncol);
+      A = readBin(Af, nrow, ncol);
     }
   } else if (nbf == 2) {
     if (!strcmp(ff, "coo")) {
       if (ncol == 1) {
-        A = importBlockVectorCOO(Af, nb, size);
+        A = readBlockVectorCOO(Af, nb, size);
       } else {
-        A = importBlockMatrixCOO(Af, sep, nb, size);
+        A = readBlockMatrixCOO(Af, sep, nb, size);
       }
     } else if (!strcmp(ff, "binR")) {
       if (ncol == 1) {
-        A = importBlockVectorBin(Af, nb, size);
+        A = readBlockVectorBin(Af, nb, size);
       } else {
-        A = importBlockMatrixBinR(Af, sep, nb, size);
+        A = readBlockMatrixBinR(Af, sep, nb, size);
       }
     }
   }
@@ -108,17 +108,17 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
   else
     matsize = size;
 
-  A = import(Af, matsize, matsize, nbf, ff, sep, nb, size);
+  A = read(Af, matsize, matsize, nbf, ff, sep, nb, size);
   print_(print, "A", Af, A, matsize, matsize);
-  B = import(Bf, matsize, matsize, nbf, ff, sep, nb, size);
+  B = read(Bf, matsize, matsize, nbf, ff, sep, nb, size);
   print_(print, "B", Bf, B, matsize, matsize);
-  C = import(Cf, matsize, matsize, nbf, ff, sep, nb, size);
+  C = read(Cf, matsize, matsize, nbf, ff, sep, nb, size);
   print_(print, "C", Cf, C, matsize, matsize);
-  D = import(Df, matsize, matsize, nbf, ff, sep, nb, size);
+  D = read(Df, matsize, matsize, nbf, ff, sep, nb, size);
   print_(print, "D", Df, D, matsize, matsize);
-  V = import(Vf, matsize, 1, nbf, ff, sep, nb, size);
+  V = read(Vf, matsize, 1, nbf, ff, sep, nb, size);
   print_(print, "V", Vf, V, matsize, 1);
-  R = import(Rf, matsize, 1, nbf, ff, sep, nb, size);
+  R = read(Rf, matsize, 1, nbf, ff, sep, nb, size);
   print_(print, "R", Rf, R, matsize, 1);
 
   if (!strcmp(op, "blu")) {

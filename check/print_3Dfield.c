@@ -4,7 +4,7 @@
 
 #include <mvoputils.h>
 
-void importBlockBinR(char *filePath, char *sep, double *m, int xls, int yls,
+void readBlockBinR(char *filePath, char *sep, double *m, int xls, int yls,
                      int zls, int xgs, int ygs, int zgs, int xd, int yd, int zd,
                      int xb, int yb, int zb) {
   FILE *f;
@@ -31,7 +31,7 @@ void importBlockBinR(char *filePath, char *sep, double *m, int xls, int yls,
   fclose(f);
 }
 
-double *importMatrixBinR(char *filePath, char *sep, int Nx, int Ny, int Nz,
+double *readMatrixBinR(char *filePath, char *sep, int Nx, int Ny, int Nz,
                          int xgs, int ygs, int zgs, int *size) {
   double *m;
   m = malloc(xgs * ygs * zgs * sizeof(double));
@@ -48,7 +48,7 @@ double *importMatrixBinR(char *filePath, char *sep, int Nx, int Ny, int Nz,
         for (int l = 0; l < i; l++) {
           zds += size[3 * (l * Ny * Nx + j * Nx + k) + 2];
         }
-        importBlockBinR(filePath, sep, m, size[3 * (i * Ny * Nx + j * Nx + k)],
+        readBlockBinR(filePath, sep, m, size[3 * (i * Ny * Nx + j * Nx + k)],
                         size[3 * (i * Ny * Nx + j * Nx + k) + 1],
                         size[3 * (i * Ny * Nx + j * Nx + k) + 2], xgs, ygs, zgs,
                         xds, yds, zds, k, j, i);
@@ -101,13 +101,13 @@ void choice(int Nx, int Ny, int Nz, int sx, int sy, int sz, int print, char *Af,
   size = computeParam(Nx, Ny, Nz, sx, sy, sz);
 
   if (Af != 0) {
-    A = importMatrixBinR(Af, sep, Nx, Ny, Nz, sx, sy, sz, size);
+    A = readMatrixBinR(Af, sep, Nx, Ny, Nz, sx, sy, sz, size);
   }
   if (Bf != 0) {
-    B = importMatrixBinR(Bf, sep, Nx, Ny, Nz, sx, sy, sz, size);
+    B = readMatrixBinR(Bf, sep, Nx, Ny, Nz, sx, sy, sz, size);
   }
   if (SFf != 0) {
-    SF = importBin(SFf, sz * sy, sx);
+    SF = readBin(SFf, sz * sy, sx);
   }
 
   if (print) {

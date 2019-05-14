@@ -61,7 +61,7 @@ void genVectorBlockBin(char *filePath, int nb, int bsize, double *vect,
   fclose(f);
 }
 
-double *importBlockVectorBin(char *filePath, int nb, int bsize) {
+double *readBlockVectorBin(char *filePath, int nb, int bsize) {
 
   double *vect;
   int i;
@@ -73,7 +73,7 @@ double *importBlockVectorBin(char *filePath, int nb, int bsize) {
   return vect;
 }
 
-double *importBlockVectorCOO(char *filePath, int nb, int bsize) {
+double *readBlockVectorCOO(char *filePath, int nb, int bsize) {
 
   double *vect;
   int i;
