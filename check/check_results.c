@@ -188,8 +188,6 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     return;
   }
 
-  printf("do I free ?\n");
-
   if (nbf == 1) {
     if (Af != 0) {
       free(A);
