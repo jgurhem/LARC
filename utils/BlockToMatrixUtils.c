@@ -41,6 +41,17 @@ double *readBin(char *filePath, int nbRow, int nbCol) {
   return mat;
 }
 
+void writeBin(char *filePath, double *mat, int nbRow, int nbCol) {
+  FILE *f;
+  f = fopen(filePath, "w");
+  if (f == NULL) {
+    printf("Cannot open file %s\n", filePath);
+    exit(1);
+  }
+  fwrite(mat, sizeof(double), nbCol * nbRow, f);
+  fclose(f);
+}
+
 void genMatrixBlockBinR(char *filePath, char *sep, int nb, int bsize,
                         double *mat, int blockRow, int blockCol) {
   FILE *f;

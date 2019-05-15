@@ -156,13 +156,6 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     return;
   }
 
-  if (!strcmp(op, "mv")) {
-    prodMV(A, V, matsize);
-    print_(print, "R - computed", Vf, V, matsize, 1);
-    printf("norm = %lf\n", diffNorm(R, V, matsize));
-    return;
-  }
-
   if (!strcmp(op, "invgj")) {
     double *inv;
     inv = inversion(A, matsize);

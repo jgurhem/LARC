@@ -3,6 +3,7 @@
 
 double *readCOO(char *filePath, int nbRow, int nbCol);
 double *readBin(char *filePath, int nbRow, int nbCol);
+void writeBin(char *filePath, double *mat, int nbRow, int nbCol);
 
 double *readBlockMatrixCOO(char *filePath, char *sep, int nb, int bsize);
 double *readBlockMatrixBinR(char *filePath, char *sep, int nb, int bsize);
