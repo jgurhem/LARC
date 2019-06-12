@@ -11,5 +11,6 @@ add_test(sls_g_test2 sls_g 2)
 do_test(lu)
 do_test(doolitle_lu)
 do_test(dgeaxpxmv)
+target_compile_features(dgeaxpxmv PRIVATE c_std_11)
 do_test(powerIt)
 
