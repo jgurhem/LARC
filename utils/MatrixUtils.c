@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 double *genMat(int nbRow, int nbCol) {
 
@@ -52,10 +53,17 @@ double *extractL(double *in, int nbRow, int nbCol) {
 }
 
 void printMatrix(double *mat, int nbRow, int nbCol) {
-  int i, j;
+  int i, j, max_p = 1, log_r;
+  for (i = 0; i < nbRow * nbCol; i++) {
+    log_r = log10(fabs(mat[i])) + 1;
+    if(log_r > max_p){
+      max_p = log_r;
+    }
+  }
   for (i = 0; i < nbRow; i++) {
     for (j = 0; j < nbCol; j++) {
-      printf("%lf\t", mat[i * nbCol + j]);
+      // 5 = 1 (.) + 3 (precision) + 1 (space)
+      printf("% *.3lf  ", max_p + 5, mat[i * nbCol + j]);
     }
     printf("\n");
   }
