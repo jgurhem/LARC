@@ -1,6 +1,6 @@
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 
 double *genMat(int nbRow, int nbCol) {
 
@@ -56,7 +56,7 @@ void printMatrix(double *mat, int nbRow, int nbCol) {
   int i, j, max_p = 1, log_r;
   for (i = 0; i < nbRow * nbCol; i++) {
     log_r = log10(fabs(mat[i])) + 1;
-    if(log_r > max_p){
+    if (log_r > max_p) {
       max_p = log_r;
     }
   }

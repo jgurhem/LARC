@@ -5,8 +5,8 @@
 #include <mvoputils.h>
 
 void readBlockBinR(char *filePath, char *sep, double *m, int xls, int yls,
-                     int zls, int xgs, int ygs, int zgs, int xd, int yd, int zd,
-                     int xb, int yb, int zb) {
+                   int zls, int xgs, int ygs, int zgs, int xd, int yd, int zd,
+                   int xb, int yb, int zb) {
   FILE *f;
   char path[150];
   sprintf(path, "%s%d%s%d%s%d", filePath, zb, sep, yb, sep, xb);
@@ -32,7 +32,7 @@ void readBlockBinR(char *filePath, char *sep, double *m, int xls, int yls,
 }
 
 double *readMatrixBinR(char *filePath, char *sep, int Nx, int Ny, int Nz,
-                         int xgs, int ygs, int zgs, int *size) {
+                       int xgs, int ygs, int zgs, int *size) {
   double *m;
   m = malloc(xgs * ygs * zgs * sizeof(double));
   for (int i = 0; i < Nz; i++) {
@@ -49,9 +49,9 @@ double *readMatrixBinR(char *filePath, char *sep, int Nx, int Ny, int Nz,
           zds += size[3 * (l * Ny * Nx + j * Nx + k) + 2];
         }
         readBlockBinR(filePath, sep, m, size[3 * (i * Ny * Nx + j * Nx + k)],
-                        size[3 * (i * Ny * Nx + j * Nx + k) + 1],
-                        size[3 * (i * Ny * Nx + j * Nx + k) + 2], xgs, ygs, zgs,
-                        xds, yds, zds, k, j, i);
+                      size[3 * (i * Ny * Nx + j * Nx + k) + 1],
+                      size[3 * (i * Ny * Nx + j * Nx + k) + 2], xgs, ygs, zgs,
+                      xds, yds, zds, k, j, i);
       }
     }
   }

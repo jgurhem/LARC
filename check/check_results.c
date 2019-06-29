@@ -4,8 +4,8 @@
 
 #include <mvoputils.h>
 
-double *read(char *Af, int nrow, int ncol, int nbf, char *ff, char *sep,
-               int nb, int size) {
+double *read(char *Af, int nrow, int ncol, int nbf, char *ff, char *sep, int nb,
+             int size) {
   double *A = 0;
   if (Af == 0)
     return 0;

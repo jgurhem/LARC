@@ -4,9 +4,9 @@
 
 #include <mvoputils.h>
 
-void readBlockBinR(char *filePath, char *sep, double *mat, int bsRow,
-                     int bsCol, int gsCol, int startR, int startC, int blockRow,
-                     int blockCol) {
+void readBlockBinR(char *filePath, char *sep, double *mat, int bsRow, int bsCol,
+                   int gsCol, int startR, int startC, int blockRow,
+                   int blockCol) {
   FILE *f;
   char matPath[150];
   sprintf(matPath, "%s%d%s%d", filePath, blockRow, sep, blockCol);
@@ -29,7 +29,7 @@ void readBlockBinR(char *filePath, char *sep, double *mat, int bsRow,
 }
 
 double *readMatrixBinR(char *filePath, char *sep, int nbRow, int nbCol,
-                         int gsRow, int gsCol, int *size) {
+                       int gsRow, int gsCol, int *size) {
   double *m;
   m = malloc(gsRow * gsCol * sizeof(double));
   for (int i = 0; i < nbCol; i++) {
@@ -42,7 +42,7 @@ double *readMatrixBinR(char *filePath, char *sep, int nbRow, int nbCol,
         startR += size[2 * k * nbCol + 1];
       }
       readBlockBinR(filePath, sep, m, size[2 * (j * nbCol + i) + 1],
-                      size[2 * (j * nbCol + i)], gsCol, startR, startC, j, i);
+                    size[2 * (j * nbCol + i)], gsCol, startR, startC, j, i);
     }
   }
   return m;
@@ -108,11 +108,11 @@ void choice(int bx, int sx, int sy, int nbProc, int nbLocIt, int print,
 
   if (Af != 0) {
     A = readMatrixBinR(Af, sep, nbProc / bx, bx, size[2 * nbProc + 1],
-                         size[2 * nbProc], size);
+                       size[2 * nbProc], size);
   }
   if (Bf != 0) {
     B = readMatrixBinR(Bf, sep, nbProc / bx, bx, size[2 * nbProc + 1],
-                         size[2 * nbProc], size);
+                       size[2 * nbProc], size);
   }
   if (SFf != 0) {
     SF = readBin(SFf, sy, sx);
