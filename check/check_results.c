@@ -128,7 +128,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     print_(print, "l", Bf, l, matsize, matsize);
     print_(print, "u", Bf, u, matsize, matsize);
     prodMat(l, u, matsize);
-    print_(print, "B - computed", Bf, l, matsize, matsize);
+    print_(print, "A - computed", Bf, l, matsize, matsize);
     printf("norm = %lf\n", diffNorm(l, A, matsize * matsize));
     free(l);
     free(u);
@@ -175,7 +175,7 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
   if (!strcmp(op, "dgeaxpxmv")) {
     double *res;
     res = dgeaxpxmv(A, V, matsize);
-    print_(print, "R - computed", Vf, V, matsize, 1);
+    print_(print, "R - computed", Vf, res, matsize, 1);
     printf("norm = %lf\n", diffNorm(res, R, matsize * matsize));
     free(res);
     return;
