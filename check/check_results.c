@@ -135,6 +135,20 @@ void choice(int nb, int size, int print, int nbf, int nbit, double p, char *Af,
     return;
   }
 
+  if (!strcmp(op, "lu")) {
+    double *u, *l;
+    l = extractMatrixL(matsize, 1, B);
+    u = extractMatrixU(matsize, 1, B);
+    print_(print, "l", Bf, l, matsize, matsize);
+    print_(print, "u", Bf, u, matsize, matsize);
+    prodMat(l, u, matsize);
+    print_(print, "A - computed", Bf, l, matsize, matsize);
+    printf("norm = %lf\n", diffNorm(l, A, matsize * matsize));
+    free(l);
+    free(u);
+    return;
+  }
+
   if (!strcmp(op, "slsg")) {
     gaussElimination(A, V, matsize);
     print_(print, "R - computed", Vf, V, matsize, 1);
